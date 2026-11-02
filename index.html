@@ -389,25 +389,51 @@ a { color: inherit; }
 }
 .lawyer.is-surprised .lawyer__brows { transform: translateY(-5px); }
 
+/* Martelo: em repouso fica levantado; ao clicar, bate no bloco */
 .lawyer__arm {
   transform-box: view-box;
   transform-origin: 226px 268px;
+  transform: rotate(-70deg);
 }
-.lawyer.is-waving .lawyer__arm { animation: wave 1.1s ease-in-out; }
+.lawyer.is-striking .lawyer__arm { animation: strike .9s cubic-bezier(.3, 0, .2, 1); }
+
+@keyframes strike {
+  0%   { transform: rotate(-70deg); }
+  28%  { transform: rotate(-98deg); }  /* prepara */
+  40%  { transform: rotate(2deg); }    /* bate! */
+  48%  { transform: rotate(-9deg); }   /* quica */
+  56%  { transform: rotate(0deg); }
+  72%  { transform: rotate(0deg); }
+  100% { transform: rotate(-70deg); }
+}
+
+.lawyer__impact { opacity: 0; }
+.lawyer.is-striking .lawyer__impact { animation: impact .9s ease-out; }
+
+@keyframes impact {
+  0%, 38% { opacity: 0; }
+  42%     { opacity: 1; }
+  70%     { opacity: 0; }
+}
+
+/* A cabeça dá um pequeno susto no momento da batida */
+.lawyer.is-striking .lawyer__brows { animation: brows .9s ease-out; }
+@keyframes brows {
+  0%, 38%, 70%, 100% { transform: translateY(0); }
+  42%, 55% { transform: translateY(-5px); }
+}
 
 .lawyer__hands { display: none; }
 
-@keyframes tap {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
-}
-
-@keyframes wave {
-  0%, 100% { transform: rotate(0); }
-  20% { transform: rotate(-22deg); }
-  40% { transform: rotate(10deg); }
-  60% { transform: rotate(-22deg); }
-  80% { transform: rotate(6deg); }
+/* No celular o martelo desce até o topo do botão */
+@keyframes strike-m {
+  0%   { transform: rotate(-105deg); }
+  28%  { transform: rotate(-128deg); }
+  40%  { transform: rotate(26deg); }
+  48%  { transform: rotate(15deg); }
+  56%  { transform: rotate(26deg); }
+  72%  { transform: rotate(26deg); }
+  100% { transform: rotate(-105deg); }
 }
 
 .participants {
@@ -866,11 +892,10 @@ mark {
   .lawyer__hint { font-size: .58rem; margin-top: 3px; }
   .lawyer__btn { width: 150px; margin: 0 auto; }
   .lawyer__svg { animation: none; }
-  .lawyer__arm { display: none; }
   .lawyer__hands { display: inline; }
-  .lawyer__hand { transform-box: fill-box; }
-  .lawyer.is-waving .lawyer__hand--l { animation: tap .32s ease-in-out 2; }
-  .lawyer.is-waving .lawyer__hand--r { animation: tap .32s ease-in-out .16s 2; }
+  .lawyer__arm { transform: rotate(-105deg); } /* braço mais em pé, martelo para cima */
+  .lawyer__desk { display: none; }
+  .lawyer.is-striking .lawyer__arm { animation: strike-m .9s cubic-bezier(.3, 0, .2, 1); }
   .hero__mark { margin: 0 auto 8px; width: 96px; }
   .hero__cta { justify-content: center; }
   .participants { gap: 22px; }
@@ -975,7 +1000,7 @@ mark {
                 </g>
               </g>
 
-              <!-- Mãos apoiadas nos botões (só no celular) -->
+              <!-- Mão esquerda apoiada no botão + batida no botão (só no celular) -->
               <g class="lawyer__hands">
                 <g class="lawyer__hand lawyer__hand--l">
                   <path d="M62 294 C66 314 76 330 88 338" fill="none" stroke="#5a320a" stroke-width="27" stroke-linecap="round"/>
@@ -983,20 +1008,30 @@ mark {
                   <ellipse cx="94" cy="343" rx="17" ry="10" fill="#f2d6b8" stroke="#7a4510" stroke-width="3"/>
                   <path d="M93 338 v8 M100 338 v8" stroke="#7a4510" stroke-width="2" stroke-linecap="round"/>
                 </g>
-                <g class="lawyer__hand lawyer__hand--r">
-                  <path d="M238 294 C234 314 224 330 212 338" fill="none" stroke="#5a320a" stroke-width="27" stroke-linecap="round"/>
-                  <path d="M238 294 C234 314 224 330 212 338" fill="none" stroke="#7a4510" stroke-width="22" stroke-linecap="round"/>
-                  <ellipse cx="206" cy="343" rx="17" ry="10" fill="#f2d6b8" stroke="#7a4510" stroke-width="3"/>
-                  <path d="M200 338 v8 M207 338 v8" stroke="#7a4510" stroke-width="2" stroke-linecap="round"/>
+                <g class="lawyer__impact" stroke="#c89b62" stroke-width="3" stroke-linecap="round" fill="none">
+                  <path d="M242 350 l-11 -3 M280 350 l11 -3 M246 338 l-8 -9 M276 338 l8 -9"/>
                 </g>
               </g>
 
-              <!-- Braço que acena -->
+              <!-- Bloco de madeira do martelo (computador) -->
+              <g class="lawyer__desk">
+                <rect x="258" y="326" width="40" height="8" rx="3" fill="#8b5a2b" stroke="#5a320a" stroke-width="2"/>
+                <rect x="265" y="316" width="26" height="11" rx="2" fill="#a0672e" stroke="#5a320a" stroke-width="2"/>
+                <g class="lawyer__impact" stroke="#c89b62" stroke-width="3" stroke-linecap="round" fill="none">
+                  <path d="M262 314 l-10 -4 M296 314 l10 -4 M266 303 l-7 -9 M292 303 l7 -9"/>
+                </g>
+              </g>
+
+              <!-- Braço com o martelo de juiz (computador) -->
               <g class="lawyer__arm">
-                <path d="M224 266 C242 252 254 232 260 206" fill="none" stroke="#7a4510" stroke-width="24" stroke-linecap="round"/>
-                <path d="M252 210 L270 214" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
-                <circle cx="262" cy="192" r="15" fill="#f2d6b8" stroke="#7a4510" stroke-width="3"/>
-                <path d="M254 180 v-8 M261 178 v-10 M268 180 v-8" stroke="#7a4510" stroke-width="3" stroke-linecap="round"/>
+                <path d="M226 268 L250 296" fill="none" stroke="#5a320a" stroke-width="28" stroke-linecap="round"/>
+                <path d="M226 268 L250 296" fill="none" stroke="#7a4510" stroke-width="23" stroke-linecap="round"/>
+                <path d="M238 293 L249 283" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+                <rect x="248" y="293" width="30" height="7" rx="3" fill="#b07a3c" stroke="#5a320a" stroke-width="2"/>
+                <rect x="272" y="282" width="18" height="34" rx="4" fill="#8b5a2b" stroke="#5a320a" stroke-width="2.5"/>
+                <path d="M272 289 h18 M272 309 h18" stroke="#c89b62" stroke-width="3"/>
+                <circle cx="252" cy="296" r="13" fill="#f2d6b8" stroke="#7a4510" stroke-width="3"/>
+                <path d="M248 291 h8 M248 297 h8 M249 303 h6" stroke="#7a4510" stroke-width="2" stroke-linecap="round"/>
               </g>
 
               <!-- Cabeça (segue o cursor) -->
@@ -1488,28 +1523,31 @@ mark {
       }, 2200 + Math.random() * 3000);
     })();
 
-    function wave() {
-      lawyer.classList.remove("is-waving");
-      void lawyer.offsetWidth;
-      lawyer.classList.add("is-waving");
+    // Bate o martelo (a batida acontece em ~40% da animação de 0,9s)
+    const IMPACT_MS = 360;
+    let strikeTimer = null;
+    function strike() {
+      lawyer.classList.remove("is-striking");
+      void lawyer.offsetWidth; // reinicia a animação mesmo com cliques seguidos
+      lawyer.classList.add("is-striking");
+      clearTimeout(strikeTimer);
+      strikeTimer = setTimeout(() => lawyer.classList.remove("is-striking"), 950);
     }
-    lawyer.addEventListener("animationend", (e) => {
-      if (e.animationName === "wave") lawyer.classList.remove("is-waving");
-    });
 
     function nextTip() {
       tipIndex = (tipIndex + 1) % tips.length;
       tipEl.classList.add("is-changing");
+      // A nova resposta aparece junto com a batida do martelo
       setTimeout(() => {
         tipEl.textContent = tips[tipIndex];
         tipEl.classList.remove("is-changing");
-      }, 180);
+      }, IMPACT_MS);
       hintEl.textContent = `Dica ${tipIndex + 1} de ${tips.length}`;
-      wave();
+      strike();
     }
     $("#lawyerBtn").addEventListener("click", nextTip);
 
-    setTimeout(wave, 700); // aceno de boas-vindas
+    setTimeout(strike, 700); // batida de boas-vindas
   }
 
   /* =========================================================
